@@ -1,0 +1,17 @@
+.container {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+input {
+  color: #111;
+  font-size: 14px;
+}
+
+label {
+  font-size: 14px;
+}
+
+

@@ -1,0 +1,3 @@
+<view data-navigate-name="logs" catchtap="navigate">
+  seed
+</view>

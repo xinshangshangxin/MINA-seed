@@ -1,0 +1,22 @@
+$light_grey: #efefef !default;
+$golden: #D6BC84 !default;
+$white: #fff;
+$black: #000;
+$btn-gb-color: #434343;
+$btn-light-grey: #b2b2b2;
+$gold-font-color: #d6bc84;
+$grey-bg-search: #c1c1c6;
+$bar-black-text: $white !important;
+$bar-black-border: $black !important;
+$bar-black-bg: $black !important;
+$yellow: #f3a536;
+$red: #d00000;
+
+@function px2rpx( $px ) {
+  @return $px *2rpx;
+}
+
+@function em2rpx($em) {
+  @return $em * 28rpx;
+}
+

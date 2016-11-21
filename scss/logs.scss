@@ -1,0 +1,10 @@
+@import "tools";
+
+.log-list {
+  display: flex;
+  flex-direction: column;
+  padding: px2rpx(20);
+}
+.log-item {
+  margin: px2rpx(5);
+}
