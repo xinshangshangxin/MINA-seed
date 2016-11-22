@@ -10,6 +10,16 @@ let argv = yargs
     describe: 'add a new page',
     type: 'string',
   })
+  .option('j', {
+    alias: 'json',
+    describe: 'add pageName.json when add new page',
+    type: 'boolean',
+  })
+  .option('t', {
+    alias: 'top',
+    describe: 'unshift pageName to app.json -> pages when add new page',
+    type: 'boolean',
+  })
   .option('e', {
     alias: 'eslintFix',
     describe: 'gulp eslintFix',
@@ -41,6 +51,7 @@ function getPagePath(name) {
   const directoryPath = path.join(__dirname, `../pages/${name}`);
   const wxmlPath = path.join(__dirname, `../pages/${name}/${name}.wxml`);
   const jsPath = path.join(__dirname, `../pages/${name}/${name}.js`);
+  const jsonPath = path.join(__dirname, `../pages/${name}/${name}.json`);
   const scssPath = path.join(__dirname, `../scss/${name}.scss`);
   const pagePath = `pages/${name}/${name}`;
 
@@ -48,6 +59,7 @@ function getPagePath(name) {
     directoryPath,
     wxmlPath,
     jsPath,
+    jsonPath,
     scssPath,
     pagePath,
   };
@@ -56,23 +68,56 @@ function getPagePath(name) {
 function checkNotExists(filePath) {
   return fs.accessAsync(filePath)
     .then(() =>
-       Promise.reject(new Error(`${filePath} exists`))
-    , () => true);
+        Promise.reject(new Error(`${filePath} exists`))
+      , () => true);
 }
 
-function addPageToAppJson(directoryPath) {
+function addPageToAppJson(directoryPath, top) {
   const appJsonPath = path.resolve(__dirname, '../app.json');
   fs.readJsonAsync(appJsonPath)
     .then((obj) => {
       obj.pages = obj.pages || [];
-      obj.pages.push(directoryPath);
 
+      if (top) {
+        obj.pages.unshift(directoryPath);
+      }
+      else {
+        obj.pages.push(directoryPath);
+      }
       return fs.writeJsonAsync(appJsonPath, obj);
     });
 }
 
-function createFileIfNotExists(name) {
-  const { directoryPath, wxmlPath, jsPath, pagePath, scssPath } = getPagePath(name);
+function addPageJson(jsonPath, isAddJson) {
+  if (!isAddJson) {
+    return Promise.resolve();
+  }
+  return fs.ensureFileAsync(jsonPath)
+    .then(() =>
+      fs.writeJsonAsync(jsonPath, {
+        navigationBarTitleText: 'title',
+      })
+    );
+}
+
+function addPageJs(jsPath) {
+  return fs.ensureFileAsync(jsPath)
+    .then(() =>
+      fs.writeFileAsync(jsPath, `
+Page({
+  data: {
+    title: undefined,
+  },
+  onLoad(option) {
+    console.log(option);
+    
+  },
+});
+`))
+}
+
+function createFileIfNotExists(name, isAddJson, isTop) {
+  const { directoryPath, wxmlPath, jsPath, pagePath, scssPath, jsonPath } = getPagePath(name);
 
   return Promise
     .props({
@@ -80,17 +125,18 @@ function createFileIfNotExists(name) {
       scss: checkNotExists(scssPath),
     })
     .then(() =>
-       Promise.props({
-         wxml: fs.ensureFileAsync(wxmlPath),
-         js: fs.ensureFileAsync(jsPath),
-         scss: fs.ensureFileAsync(scssPath),
-         addPageToAppJson: addPageToAppJson(pagePath),
-       })
+      Promise.props({
+        wxml: fs.ensureFileAsync(wxmlPath),
+        js: addPageJs(jsPath),
+        json: addPageJson(jsonPath, isAddJson),
+        scss: fs.ensureFileAsync(scssPath),
+        addPageToAppJson: addPageToAppJson(pagePath, isTop),
+      })
     );
 }
 
 function addPage(name) {
-  return createFileIfNotExists(name)
+  return createFileIfNotExists(name, argv.j || argv.json, argv.t || argv.top)
     .then(() => {
       console.info('create success');
     })
