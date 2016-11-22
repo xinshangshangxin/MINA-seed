@@ -27,7 +27,7 @@ const eslintFixCmd = {
 const args = argv._;
 
 if (argv.add || argv.a || checkArgs(2, 'add', args[1])) {
-  addPage(argv.a);
+  addPage(argv.a || args[1]);
 }
 else if (argv.eslintFix || argv.e || checkArgs(1, 'eslintFix')) {
   spawnDefer(eslintFixCmd);
