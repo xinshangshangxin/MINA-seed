@@ -2,8 +2,8 @@ const config = {
   clean: {                   // 清除生成文件的路径
     src: [
       './pages/**/*.wxss',
-      './utils/vendor'
-    ]
+      './utils/vendor',
+    ],
   },
   sass: {
     watcherPath: ['scss/**/*.scss'],    // watch:scss 文件路径
@@ -14,7 +14,7 @@ const config = {
     opt: {
       cwd: './scss',
     },
-    dest: 'pages/'
+    dest: 'pages/',
   },
   js: {
     src: [
@@ -28,7 +28,7 @@ const config = {
       cwd: './',
       base: './',
     },
-    dest: './'
+    dest: './',
   },
   npmModules: {
     src: [
@@ -38,13 +38,13 @@ const config = {
     ],
     opt: {
       cwd: './node_modules',
-      base: './node_modules'
+      base: './node_modules',
     },
     copyFiles: {
       src: ['./config/gulp/copyFiles/schedule.js'],
-      dest: './utils/vendor/bluebird/js/release'
+      dest: './utils/vendor/bluebird/js/release',
     },
-    dest: './utils/vendor'
+    dest: './utils/vendor',
   },
 };
 

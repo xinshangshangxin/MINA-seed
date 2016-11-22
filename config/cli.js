@@ -4,24 +4,24 @@ const path = require('path');
 const yargs = require('yargs');
 const { isRegExp, isNumber, spawnDefer } = require('./utilities');
 
-var argv = yargs
+let argv = yargs
   .option('a', {
     alias: 'add',
     describe: 'add a new page',
-    type: 'string'
+    type: 'string',
   })
   .option('e', {
     alias: 'eslintFix',
     describe: 'gulp eslintFix',
-    type: 'boolean'
+    type: 'boolean',
   })
   .help('help')
   .argv;
 
-const gulpfilePath = path.join(__dirname, `../gulpfile.js`);
+const gulpfilePath = path.join(__dirname, '../gulpfile.js');
 const eslintFixCmd = {
   cmd: 'gulp',
-  arg: ['--gulpfile', gulpfilePath, 'eslintFix']
+  arg: ['--gulpfile', gulpfilePath, 'eslintFix'],
 };
 
 const args = argv._;
@@ -53,17 +53,17 @@ function getPagePath(name) {
   };
 }
 
-function checkNotExists(path) {
-  return fs.accessAsync(path)
-    .then(() => {
-      return Promise.reject(new Error(`${path} exists`));
-    }, () => true);
+function checkNotExists(filePath) {
+  return fs.accessAsync(filePath)
+    .then(() =>
+       Promise.reject(new Error(`${filePath} exists`))
+    , () => true);
 }
 
 function addPageToAppJson(directoryPath) {
   const appJsonPath = path.resolve(__dirname, '../app.json');
   fs.readJsonAsync(appJsonPath)
-    .then(function(obj) {
+    .then((obj) => {
       obj.pages = obj.pages || [];
       obj.pages.push(directoryPath);
 
@@ -79,14 +79,14 @@ function createFileIfNotExists(name) {
       directory: checkNotExists(directoryPath),
       scss: checkNotExists(scssPath),
     })
-    .then(() => {
-      return Promise.props({
-        wxml: fs.ensureFileAsync(wxmlPath),
-        js: fs.ensureFileAsync(jsPath),
-        scss: fs.ensureFileAsync(scssPath),
-        addPageToAppJson: addPageToAppJson(pagePath),
-      });
-    });
+    .then(() =>
+       Promise.props({
+         wxml: fs.ensureFileAsync(wxmlPath),
+         js: fs.ensureFileAsync(jsPath),
+         scss: fs.ensureFileAsync(scssPath),
+         addPageToAppJson: addPageToAppJson(pagePath),
+       })
+    );
 }
 
 function addPage(name) {
@@ -114,5 +114,4 @@ function checkArgs(len, firstStr, returnValue = true) {
   }
 
   return false;
-
 }
