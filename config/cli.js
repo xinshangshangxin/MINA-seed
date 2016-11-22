@@ -42,12 +42,14 @@ function getPagePath(name) {
   const wxmlPath = path.join(__dirname, `../pages/${name}/${name}.wxml`);
   const jsPath = path.join(__dirname, `../pages/${name}/${name}.js`);
   const scssPath = path.join(__dirname, `../scss/${name}.scss`);
+  const pagePath = `pages/${name}/${name}`;
 
   return {
     directoryPath,
     wxmlPath,
     jsPath,
-    scssPath
+    scssPath,
+    pagePath,
   };
 }
 
@@ -58,8 +60,19 @@ function checkNotExists(path) {
     }, () => true);
 }
 
+function addPageToAppJson(directoryPath) {
+  const appJsonPath = path.resolve(__dirname, '../app.json');
+  fs.readJsonAsync(appJsonPath)
+    .then(function(obj) {
+      obj.pages = obj.pages || [];
+      obj.pages.push(directoryPath);
+
+      return fs.writeJsonAsync(appJsonPath, obj);
+    });
+}
+
 function createFileIfNotExists(name) {
-  const { directoryPath, wxmlPath, jsPath, scssPath } = getPagePath(name);
+  const { directoryPath, wxmlPath, jsPath, pagePath, scssPath } = getPagePath(name);
 
   return Promise
     .props({
@@ -71,6 +84,7 @@ function createFileIfNotExists(name) {
         wxml: fs.ensureFileAsync(wxmlPath),
         js: fs.ensureFileAsync(jsPath),
         scss: fs.ensureFileAsync(scssPath),
+        addPageToAppJson: addPageToAppJson(pagePath),
       });
     });
 }
