@@ -33,20 +33,16 @@ const svc = {
     console.info('set setData: ', result);
     this.setData(result);
   }),
-  navigate(params = {}) {
-    let url = params.url;
-    let qs = params.qs || {};
-
-    if (!url) {
-      console.warn('no url found', params);
-      return svc.Promise.reject(new Error('no url found'));
-    }
-
+  joinParams(url, qs) {
     let temp = [];
     Object.keys(qs).forEach((key) => {
-      if (svc.isObject(qs[key])) {
+      if (!qs[key]) {
+        qs[key] = '';
+      }
+      else if (!svc.isString(qs[key])) {
         qs[key] = encodeURIComponent(JSON.stringify(qs[key]));
       }
+
       temp.push(`${encodeURIComponent(key)}=${qs[key]}`);
     });
 
@@ -58,10 +54,41 @@ const svc = {
         temp = `?${temp.join('&')}`;
       }
     }
+    else {
+      temp = '';
+    }
 
-    return wx.navigateToAsync({
-      url: url + temp,
-    });
+    return url + temp;
+  },
+  bindNavigate({ keys = [], name, url, filter = {} } = {}) {
+    return function bindNavigate(e) {
+      console.info(e);
+
+      let navigateName = name || e.currentTarget.dataset.navigateName;
+      let navigateUrl = url || `/pages/${navigateName}/${navigateName}`;
+
+      let qs = {};
+      keys.forEach((key) => {
+        let dataSetName = `navigate${key.substr(0, 1).toLocaleUpperCase()}${key.substr(1)}`;
+        qs[key] = e.currentTarget.dataset[dataSetName];
+
+        if (filter[key]) {
+          if (svc.isFunction(filter[key])) {
+            qs[key] = filter[key].bind(this)(qs[key]);
+          }
+          else {
+            qs[key] = filter[key];
+          }
+        }
+      });
+
+      let fullUrl = svc.joinParams(navigateUrl, qs);
+      console.info('navigateTo navigateUrl: ', navigateUrl, 'qs: ', qs, 'fullUrl: ', fullUrl);
+
+      return wx.navigateToAsync({
+        url: fullUrl,
+      });
+    };
   },
 };
 
