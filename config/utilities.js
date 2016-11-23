@@ -1,8 +1,14 @@
+const Promise = require('bluebird');
 const chalk = require('chalk');
 const notifier = require('node-notifier');
 const spawn = require('child_process').spawn;
+const path = require('path');
+const fs = Promise.promisifyAll(require('fs-extra'));
+const get = require('../utils/vendor/lodash.get/index');
+
 
 const svc = {
+  appName: undefined,
   eshintReporter(result) {
     let isNotify = false;
     if (result.messages.length) {
@@ -92,6 +98,18 @@ const svc = {
       return deferred.resolve();
     });
     return deferred.promise;
+  },
+  getAppName() {
+    if (svc.appName) {
+      return Promise.resolve(svc.appName);
+    }
+
+    const appJsonPath = path.resolve(__dirname, '../app.json');
+    return fs.readJsonAsync(appJsonPath)
+      .then((obj) => {
+        svc.appName = get(obj, 'window.navigationBarTitleText', 'MINA');
+        return svc.appName;
+      });
   },
 };
 

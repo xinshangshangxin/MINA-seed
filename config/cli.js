@@ -2,7 +2,8 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('fs-extra'));
 const path = require('path');
 const yargs = require('yargs');
-const { isRegExp, isNumber, spawnDefer } = require('./utilities');
+const { getAppName, isRegExp, isNumber, spawnDefer } = require('./utilities');
+const { pageJsData } = require('./data');
 
 let argv = yargs
   .option('a', {
@@ -10,14 +11,19 @@ let argv = yargs
     describe: 'add a new page',
     type: 'string',
   })
-  .option('j', {
-    alias: 'json',
-    describe: 'add pageName.json when add new page',
+  .option('t', {
+    alias: 'title',
+    describe: 'add pageName.json with navigationBarTitleText when add new page',
+    default: '__title__',
+    type: 'string',
+  })
+  .option('noTitle', {
+    describe: 'do not add pageName.json when add new page',
     type: 'boolean',
   })
-  .option('t', {
-    alias: 'top',
-    describe: 'unshift pageName to app.json -> pages when add new page',
+  .option('noTop', {
+    alias: 'bottom',
+    describe: 'add pageName to app.json at bottom not top when add new page',
     type: 'boolean',
   })
   .option('e', {
@@ -88,35 +94,34 @@ function addPageToAppJson(directoryPath, top) {
     });
 }
 
-function addPageJson(jsonPath, isAddJson) {
-  if (!isAddJson) {
+function addPageJson(jsonPath, title) {
+  if (title === true) {
     return Promise.resolve();
   }
-  return fs.ensureFileAsync(jsonPath)
-    .then(() =>
-      fs.writeJsonAsync(jsonPath, {
-        navigationBarTitleText: 'title',
-      })
+
+  return Promise
+    .try(() => {
+      if (title === '__title__') {
+        return getAppName();
+      }
+      return title;
+    })
+    .then(t =>
+      fs.ensureFileAsync(jsonPath)
+        .then(() =>
+          fs.writeJsonAsync(jsonPath, {
+            navigationBarTitleText: t,
+          })
+        )
     );
 }
 
 function addPageJs(jsPath) {
   return fs.ensureFileAsync(jsPath)
-    .then(() =>
-      fs.writeFileAsync(jsPath, `
-Page({
-  data: {
-    title: undefined,
-  },
-  onLoad(option) {
-    console.log(option);
-    
-  },
-});
-`))
+    .then(() => fs.writeFileAsync(jsPath, pageJsData));
 }
 
-function createFileIfNotExists(name, isAddJson, isTop) {
+function createFileIfNotExists(name, title, pageIsTop) {
   const { directoryPath, wxmlPath, jsPath, pagePath, scssPath, jsonPath } = getPagePath(name);
 
   return Promise
@@ -128,15 +133,18 @@ function createFileIfNotExists(name, isAddJson, isTop) {
       Promise.props({
         wxml: fs.ensureFileAsync(wxmlPath),
         js: addPageJs(jsPath),
-        json: addPageJson(jsonPath, isAddJson),
+        json: addPageJson(jsonPath, title),
         scss: fs.ensureFileAsync(scssPath),
-        addPageToAppJson: addPageToAppJson(pagePath, isTop),
+        addPageToAppJson: addPageToAppJson(pagePath, pageIsTop),
       })
     );
 }
 
 function addPage(name) {
-  return createFileIfNotExists(name, argv.j || argv.json, argv.t || argv.top)
+  // true为不添加, __title__ 为添加 app.json中定义的内容(默认), 其它为用户自定义
+  let title = argv.noTitle || argv.t || argv.title;
+  let pageIsTop = !argv.noTop;
+  return createFileIfNotExists(name, title, pageIsTop)
     .then(() => {
       console.info('create success');
     })
