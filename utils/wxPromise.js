@@ -44,4 +44,6 @@ function init(config) {
   });
 }
 
-module.exports = init;
+module.exports = {
+  init,
+};
