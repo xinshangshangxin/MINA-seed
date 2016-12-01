@@ -4,8 +4,6 @@ const notifier = require('node-notifier');
 const spawn = require('child_process').spawn;
 const path = require('path');
 const fs = Promise.promisifyAll(require('fs-extra'));
-const get = require('../utils/vendor/lodash.get/index');
-
 
 const svc = {
   appName: undefined,
@@ -107,13 +105,13 @@ const svc = {
     const appJsonPath = path.resolve(__dirname, '../app.json');
     return fs.readJsonAsync(appJsonPath)
       .then((obj) => {
-        svc.appName = get(obj, 'window.navigationBarTitleText', 'MINA');
+        svc.appName = obj && obj.window && obj.window.navigationBarTitleText || 'MINA';
         return svc.appName;
       });
   },
 };
 
-['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'].forEach((name) => {
+['Arguments', 'Array', 'Date', 'Error', 'Function', 'Number', 'Object', 'RegExp', 'String'].forEach((name) => {
   svc[`is${name}`] = obj => Object.prototype.toString.call(obj) === `[object ${name}]`;
 });
 

@@ -1,3 +1,4 @@
+const redirectUrlList = [];
 const svc = {
   formatDate(fmt, date = new Date()) {
     let o = {
@@ -60,7 +61,8 @@ const svc = {
 
     return url + temp;
   },
-  bindNavigate({ keys = [], name, url, filter = {} } = {}) {
+  // eslint-disable-next-line max-len
+  bindNavigate({ name, url, params = [], redirect = false, indexRedirect = false, filter = {} } = {}) {
     return function bindNavigate(e) {
       console.info(e);
 
@@ -68,16 +70,16 @@ const svc = {
       let navigateUrl = url || `/pages/${navigateName}/${navigateName}`;
 
       let qs = {};
-      keys.forEach((key) => {
-        let dataSetName = `navigate${key.substr(0, 1).toLocaleUpperCase()}${key.substr(1)}`;
-        qs[key] = e.currentTarget.dataset[dataSetName];
+      params.forEach((paramName) => {
+        let dataSetName = `navigate${paramName.substr(0, 1).toLocaleUpperCase()}${paramName.substr(1)}`;
+        qs[paramName] = e.currentTarget.dataset[dataSetName];
 
-        if (filter[key]) {
-          if (svc.isFunction(filter[key])) {
-            qs[key] = filter[key].bind(this)(qs[key]);
+        if (filter[paramName]) {
+          if (svc.isFunction(filter[paramName])) {
+            qs[paramName] = filter[paramName].bind(this)(qs[paramName]);
           }
           else {
-            qs[key] = filter[key];
+            qs[paramName] = filter[paramName];
           }
         }
       });
@@ -85,15 +87,46 @@ const svc = {
       let fullUrl = svc.joinParams(navigateUrl, qs);
       console.info('navigateTo navigateUrl: ', navigateUrl, 'qs: ', qs, 'fullUrl: ', fullUrl);
 
+      if (indexRedirect) {
+        svc.indexRedirect(undefined, fullUrl);
+      }
+
+      if (redirect) {
+        return wx.redirectToAsync({
+          url: fullUrl,
+        });
+      }
+
       return wx.navigateToAsync({
         url: fullUrl,
       });
     };
   },
+  indexRedirect(name, url) {
+    if (!url) {
+      url = `/pages/${name}/${name}`;
+    }
+
+    redirectUrlList.push(url);
+    // 返回到首页
+    return svc.Promise
+      .try(() => wx.navigateBack({ delta: 100 }));
+  },
+  doIndexRedirect() {
+    if (redirectUrlList && redirectUrlList.length) {
+      let fullUrl = redirectUrlList.shift();
+      redirectUrlList.length = 0;
+      return wx.navigateToAsync({
+        url: fullUrl,
+      });
+    }
+
+    console.warn('no redirect page');
+    return svc.Promise.reject(new Error('no redirect page'));
+  },
 };
 
 
-// 微信开发者工具 有时会出现一个事件触发多次
 function throttle(fn, delay = 150) {
   let timer = null;
 
@@ -105,7 +138,7 @@ function throttle(fn, delay = 150) {
   };
 }
 
-['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp', 'Error'].forEach((name) => {
+['Arguments', 'Array', 'Date', 'Error', 'Function', 'Number', 'Object', 'RegExp', 'String'].forEach((name) => {
   svc[`is${name}`] = obj => Object.prototype.toString.call(obj) === `[object ${name}]`;
 });
 
