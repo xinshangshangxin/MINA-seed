@@ -1,41 +1,64 @@
 const util = require('./util');
-
-// 微信vConsole无法显示error 和 function
-require('./logger');
+const _ = require('./vendor/lodash/lodash');
 const Promise = require('./vendor/bluebird/js/release/bluebird.js');
+const rl = require('./request-loading');
+const wxLogger = require('./logger');
 
-console.log('injected bluebird promise');
-util.Promise = Promise;
-util.defer = () => {
-  let resolve;
-  let reject;
-  let promise = new Promise((...args) => {
-    resolve = args[0];
-    reject = args[1];
-  });
+function addBluebird() {
+  console.log('injected bluebird promise');
+  util.Promise = Promise;
+  util.defer = () => {
+    let resolve;
+    let reject;
+    let promise = new Promise((...args) => {
+      resolve = args[0];
+      reject = args[1];
+    });
 
-  return {
-    resolve,
-    reject,
-    promise,
+    return {
+      resolve,
+      reject,
+      promise,
+    };
   };
-};
+}
 
-// 注入部分lodash方法
-const _ = {};
-_.get = require('./vendor/lodash.get/index');
-_.find = require('./vendor/lodash.find/index');
+// eslint-disable-next-line max-len
+function init({ debugLog = true, bluebird = true, wxPromise = true, requestLoading = true, lodash = true }) {
+  // 微信vConsole无法显示error 和 function
+  if (debugLog) {
+    wxLogger.init();
+  }
 
-util._ = _;
+  if (bluebird) {
+    addBluebird();
+  }
 
+  if (wxPromise) {
+    if (!bluebird) {
+      throw new Error('wxPromise need bluebird');
+    }
 
-// 将微信接口转换为Promise
-// 如 wx.request 转换为 wx.requestAsync
-require('./wxPromise')();
+    // 将微信接口转换为Promise
+    // 如 wx.request 转换为 wx.requestAsync
+    // eslint-disable-next-line global-require
+    require('./wxPromise').init();
+    console.info('done wxPromise');
+  }
 
-console.info('done wxPromise');
+  if (requestLoading) {
+    if (!wxPromise) {
+      throw new Error('requestLoading need wxPromise');
+    }
+
+    rl.init();
+  }
+
+  if (lodash) {
+    util._ = _;
+  }
+}
 
 module.exports = {
-  Promise,
-  _,
+  init,
 };

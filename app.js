@@ -1,5 +1,5 @@
-// app.js
 const util = require('./utils/util.js');
+const inject = require('./utils/inject');
 
 App({
   onLaunch() {
@@ -13,7 +13,12 @@ App({
   },
   init() {
     // 修改/注入一些方法, 如 Promise, console, wx 接口Promise化
-    // eslint-disable-next-line global-require
-    require('./utils/inject');
+    inject.init({
+      debugLog: true,
+      bluebird: true,
+      wxPromise: true,
+      requestLoading: true,
+      lodash: true,
+    });
   },
 });
