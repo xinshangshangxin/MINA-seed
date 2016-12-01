@@ -73,7 +73,8 @@
 
 ### utils/\*\*/\*.js
 - inject.js
-  在 `app.js:27`中使用, 用于注入某些方法
+  在 `app.js:27`中使用, 用于注入某些方法  
+  
    ```js
   inject.init({
     debugLog: true,   // 使得微信vConsole显示error 和 function
