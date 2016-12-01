@@ -23,17 +23,18 @@
     "gulp-cached": "^1.1.0",
     "gulp-eslint": "^3.0.1",
     "gulp-eslint-if-fixed": "^1.0.0",
+    "gulp-filter": "^4.0.0",
     "gulp-if": "^2.0.2",
     "gulp-load-plugins": "^1.4.0",
     "gulp-remember": "^0.3.1",
     "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
     "gulp-sass": "^2.3.2",
     "node-notifier": "^4.6.1",
     "yargs": "^6.4.0"
   },
   "dependencies": {
     "bluebird": "^3.4.6",
-    "lodash.find": "^4.6.0",
-    "lodash.get": "^4.4.2"
+    "lodash": "^4.17.2"
   }
 }

@@ -1,8 +1,10 @@
+const filterConfig = require('./filterConfig');
+
 const config = {
-  clean: {                   // 清除生成文件的路径
+  clean: {
     src: [
-      './pages/**/*.wxss',
-      './utils/vendor',
+      'utils/vendor',
+      'pages/**/*.wxss',
     ],
   },
   sass: {
@@ -14,7 +16,7 @@ const config = {
     opt: {
       cwd: './scss',
     },
-    dest: 'pages/',
+    dest: 'pages/'
   },
   js: {
     src: [
@@ -28,23 +30,19 @@ const config = {
       cwd: './',
       base: './',
     },
-    dest: './',
+    dest: './'
   },
   npmModules: {
     src: [
-      'lodash.get/index.js',
-      'lodash.find/index.js',
       'bluebird/js/release/**/*',
+      'lodash/lodash.js'
     ],
     opt: {
       cwd: './node_modules',
-      base: './node_modules',
-    },
-    copyFiles: {
-      src: ['./config/gulp/copyFiles/schedule.js'],
-      dest: './utils/vendor/bluebird/js/release',
+      base: './node_modules'
     },
     dest: './utils/vendor',
+    filters: filterConfig.npmModules,
   },
 };
 
