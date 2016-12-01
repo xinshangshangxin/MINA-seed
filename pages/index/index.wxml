@@ -1,3 +1,6 @@
-<view data-navigate-name="logs" catchtap="navigate">
-  seed
+<view data-navigate-from-page="index"
+      data-navigate-name="logs"
+      data-navigate-upper-case="origin-lower-case"
+      catchtap="navigate">
+  MINA-seed
 </view>

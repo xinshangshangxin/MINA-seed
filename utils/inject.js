@@ -5,7 +5,6 @@ const rl = require('./request-loading');
 const wxLogger = require('./logger');
 
 function addBluebird() {
-  console.log('injected bluebird promise');
   util.Promise = Promise;
   util.defer = () => {
     let resolve;
@@ -32,6 +31,7 @@ function init({ debugLog = true, bluebird = true, wxPromise = true, requestLoadi
 
   if (bluebird) {
     addBluebird();
+    console.info('injected bluebird promise');
   }
 
   if (wxPromise) {
@@ -43,7 +43,7 @@ function init({ debugLog = true, bluebird = true, wxPromise = true, requestLoadi
     // 如 wx.request 转换为 wx.requestAsync
     // eslint-disable-next-line global-require
     require('./wxPromise').init();
-    console.info('done wxPromise');
+    console.info('injected wxPromise');
   }
 
   if (requestLoading) {
@@ -52,10 +52,12 @@ function init({ debugLog = true, bluebird = true, wxPromise = true, requestLoadi
     }
 
     rl.init();
+    console.info('injected requestLoading');
   }
 
   if (lodash) {
     util._ = _;
+    console.info('injected lodash');
   }
 }
 

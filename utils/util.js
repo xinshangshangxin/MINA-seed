@@ -62,7 +62,7 @@ const svc = {
     return url + temp;
   },
   // eslint-disable-next-line max-len
-  bindNavigate({ name, url, params = [], redirect = false, indexRedirect = false, filter = {} } = {}) {
+  bindNavigate({ name, url, params = [], redirect = false, indexRedirect = false } = {}) {
     return function bindNavigate(e) {
       console.info(e);
 
@@ -70,16 +70,30 @@ const svc = {
       let navigateUrl = url || `/pages/${navigateName}/${navigateName}`;
 
       let qs = {};
-      params.forEach((paramName) => {
+      params.forEach((item) => {
+        let paramName;
+        let filter;
+        if (svc.isString(item)) {
+          paramName = item;
+        }
+        else if (svc.isObject(item) && svc.isString(item.key) && item.filter) {
+          paramName = item.key;
+          filter = item.filter;
+        }
+        else {
+          console.warn('param was ignore: ', item);
+          return;
+        }
+
         let dataSetName = `navigate${paramName.substr(0, 1).toLocaleUpperCase()}${paramName.substr(1)}`;
         qs[paramName] = e.currentTarget.dataset[dataSetName];
 
-        if (filter[paramName]) {
-          if (svc.isFunction(filter[paramName])) {
-            qs[paramName] = filter[paramName].bind(this)(qs[paramName]);
+        if (filter) {
+          if (svc.isFunction(filter)) {
+            qs[paramName] = filter.bind(this)(qs[paramName]);
           }
           else {
-            qs[paramName] = filter[paramName];
+            qs[paramName] = filter;
           }
         }
       });

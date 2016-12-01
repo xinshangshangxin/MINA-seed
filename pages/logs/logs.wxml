@@ -1,5 +1,6 @@
 <!--logs.wxml-->
 <view class="container log-list">
+  <textarea value="{{optionStr}}" maxlength="{{0}}" style="height: 700rpx;"></textarea>
   <block wx:for="{{logs}}" wx:for-item="log" wx:key="*this">
     <text class="log-item">{{index + 1}}. {{log}}</text>
   </block>

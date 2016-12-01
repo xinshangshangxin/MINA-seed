@@ -1,18 +1,30 @@
-const util = require('./utils/util.js');
+const { formatDate } = require('./utils/util.js');
 const inject = require('./utils/inject');
 
 App({
   onLaunch() {
-    // 调用API从本地缓存中获取数据
-    let logs = wx.getStorageSync('logs') || [];
-    logs.unshift(Date.now());
-    logs.splice(100, logs.length);
-    wx.setStorageSync('logs', logs);
-    console.log('launch at: ', util.formatDate('yy/MM/dd hh:mm:ss'));
+    console.log('launch at: ', formatDate('yy/MM/dd hh:mm:ss'));
+
     this.init();
+
+    return wx
+      .getStorageAsync({
+        key: 'logs',
+      })
+      .then((data) => {
+        let logs = data.data;
+        logs.unshift(Date.now());
+        logs.splice(100, logs.length);
+
+        return wx.setStorageAsync({
+          key: 'logs',
+          data: logs,
+        });
+      })
+      .catch(e => console.warn(e));
   },
   init() {
-    // 修改/注入一些方法, 如 Promise, console, wx 接口Promise化
+    // 注入一些方法, 如 bluebird, lodash, debugLog, wx 接口Promise化, requestLoading
     inject.init({
       debugLog: true,
       bluebird: true,

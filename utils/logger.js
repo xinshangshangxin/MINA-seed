@@ -27,6 +27,7 @@ function init() {
         originFun.apply(console, args);
       };
     });
+    console.info('injected vConsole debug log');
   }
 }
 
