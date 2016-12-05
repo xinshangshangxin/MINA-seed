@@ -8,15 +8,16 @@ const $ = require('gulp-load-plugins')({
 
 
 function changeSrc(src) {
-
   if (isString(src)) {
     return path.join('**', src);
   }
   else if (isArray(src)) {
-    return src.map((value) => {
-      return path.join('**', value);
-    });
+    return src.map(value =>
+       path.join('**', value)
+    );
   }
+
+  return src;
 }
 
 function fileFilter(stream, filters = []) {
@@ -37,21 +38,20 @@ function fileFilter(stream, filters = []) {
       .pipe(f)
       .pipe($.replace(item.subStr, item.newStr))
       .pipe(f.restore);
-
   });
 
   return stream;
 }
 
-gulp.task('clean', function(done) {
-  return $.del(config.clean.src, done);
-});
+gulp.task('clean', done =>
+   $.del(config.clean.src, done)
+);
 
 gulp.task('lint', () => gulp
   .src(config.js.src, config.js.opt)
   .pipe($.cached('wxJs'))
   .pipe($.eslint())
-  .pipe($.eslint.result(result => {
+  .pipe($.eslint.result((result) => {
     eshintReporter(result);
   }))
   .pipe($.remember('wxJs'))
@@ -60,7 +60,7 @@ gulp.task('lint', () => gulp
 gulp.task('eslintFix', () => gulp
   .src(config.js.src, config.js.opt)
   .pipe($.eslint({ fix: true }))
-  .pipe($.eslint.result(result => {
+  .pipe($.eslint.result((result) => {
     eshintReporter(result);
   }))
   .pipe($.eslint.format())
@@ -85,22 +85,22 @@ gulp.task('watch', () => {
     });
 });
 
-gulp.task('sass', function () {
-  return gulp.src(config.sass.src, config.sass.opt)
+gulp.task('sass', () =>
+   gulp.src(config.sass.src, config.sass.opt)
     .pipe($.sass())
     .on('error', $.sass.logError)
-    .pipe($.rename(function (path) {
-      path.dirname += `/${path.basename}`;
-      path.extname = `.wxss`;
-      return path;
+    .pipe($.rename((filePath) => {
+      filePath.dirname += `/${filePath.basename}`;
+      filePath.extname = '.wxss';
+      return filePath;
     }))
-    .pipe(gulp.dest(config.sass.dest));
-});
+    .pipe(gulp.dest(config.sass.dest))
+);
 
-gulp.task('npmModules', function () {
-  return fileFilter(gulp.src(config.npmModules.src, config.npmModules.opt), config.npmModules.filters)
-    .pipe(gulp.dest(config.npmModules.dest));
-});
+gulp.task('npmModules', () =>
+   fileFilter(gulp.src(config.npmModules.src, config.npmModules.opt), config.npmModules.filters)
+    .pipe(gulp.dest(config.npmModules.dest))
+);
 
 
 gulp.task('default', () => {

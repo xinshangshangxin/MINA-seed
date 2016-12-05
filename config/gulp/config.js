@@ -16,7 +16,7 @@ const config = {
     opt: {
       cwd: './scss',
     },
-    dest: 'pages/'
+    dest: 'pages/',
   },
   js: {
     src: [
@@ -30,16 +30,16 @@ const config = {
       cwd: './',
       base: './',
     },
-    dest: './'
+    dest: './',
   },
   npmModules: {
     src: [
       'bluebird/js/release/**/*',
-      'lodash/lodash.js'
+      'lodash/lodash.js',
     ],
     opt: {
       cwd: './node_modules',
-      base: './node_modules'
+      base: './node_modules',
     },
     dest: './utils/vendor',
     filters: filterConfig.npmModules,
