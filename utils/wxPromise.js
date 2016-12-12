@@ -1,10 +1,17 @@
 const { Promise } = require('./util');
 
 const noPromiseMethods = {
+  canvasToTempFilePath: true,
+  clearStorage: true,
+  closeSocket: true,
   createAnimation: true,
+  createAudioContext: true,
   createContext: true,
+  createVideoContext: true,
+  drawCanvas: true,
   hideKeyboard: true,
   hideNavigationBarLoading: true,
+  hideToast: true,
   navigateBack: true,
   pauseBackgroundAudio: true,
   pauseVoice: true,
