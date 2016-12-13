@@ -38,7 +38,7 @@ namespace "MINAApi" {
       count?: number;
       sizeType?: string[];
       sourceType?: string[];
-      then: (res: { tempFilePaths: string[], [propName: string]: any }) => void;
+      then?: (res: { tempFilePaths: string[], [propName: string]: any }) => void;
     }): Promise;
     previewImageAsync(obj: {
       current?: string;
@@ -70,18 +70,18 @@ namespace "MINAApi" {
 
     saveFileAsync(obj: {
       tempFilePath: string,
-      then: (res: { savedFilePath: string, [propName: string]: any }) => void;
+      then?: (res: { savedFilePath: string, [propName: string]: any }) => void;
     });
     getSavedFileListAsync(obj: {
-      then: (res: { errMsg: string, fileList: { filePath: string, createTime: number, size: number, [propName: string]: any }[] }) => void;
+      then?: (res: { errMsg: string, fileList: { filePath: string, createTime: number, size: number, [propName: string]: any }[] }) => void;
     });
     getSavedFileInfoAsync(obj: {
       filePath: string;
-      then: (res: { errMsg: string, createTime: number, size: number, [propName: string]: any }) => void;
+      then?: (res: { errMsg: string, createTime: number, size: number, [propName: string]: any }) => void;
     });
     removeSavedFileAsync(obj: {
       filePath: string;
-      then: (res: { errMsg: string, fileList: { filePath: string, createTime: number, size: number, [propName: string]: any }[] }) => void;
+      then?: (res: { errMsg: string, fileList: { filePath: string, createTime: number, size: number, [propName: string]: any }[] }) => void;
     });
 
     chooseVideoAsync(obj: {
@@ -113,16 +113,16 @@ namespace "MINAApi" {
     setStorageSync(key: string, data: Object|string);
     getStorageAsync(obj: {
       key: string;
-      then: (res: { data: any, [propName: string]: any }) => void;
+      then?: (res: { data: any, [propName: string]: any }) => void;
     });
     getStorageSync(key: string): any;
     getStorageInfoAsync(obj: {
-      then: (res: { keys: string[], currentSize: number, limitSize: number, [propName: string]: any }) => void;
+      then?: (res: { keys: string[], currentSize: number, limitSize: number, [propName: string]: any }) => void;
     });
     getStorageInfoSync(): { keys: string[], currentSize: number, limitSize: number };
     removeStorageAsync(obj: {
       key: string;
-      then: (res: { data: any, [propName: string]: any }) => void;
+      then?: (res: { data: any, [propName: string]: any }) => void;
     });
     removeStorageSync(key: string);
     clearStorage();
@@ -132,11 +132,11 @@ namespace "MINAApi" {
   interface MINALocationAPIAsync {
     getLocationAsync(obj: {
       type: string;
-      then: (res: { latitude: number, longitude: number, speed: number, accuracy: number, [propName: string]: any }) => void;
+      then?: (res: { latitude: number, longitude: number, speed: number, accuracy: number, [propName: string]: any }) => void;
     });
     chooseLocationAsync(obj: {
       type: string;
-      then: (res: { latitude: number, longitude: number, speed: number, accuracy: number, [propName: string]: any }) => void;
+      then?: (res: { latitude: number, longitude: number, speed: number, accuracy: number, [propName: string]: any }) => void;
     });
     openLocationAsync(obj: {
       latitude: number;
@@ -149,10 +149,10 @@ namespace "MINAApi" {
 
   interface MINADeviceAPIAsync {
     getNetworkTypeAsync(obj: {
-      then: (res: { networkType: string, [propName: string]: any }) => void
+      then?: (res: { networkType: string, [propName: string]: any }) => void
     });
     getSystemInfoAsync(obj: {
-      then: (res: {
+      then?: (res: {
         model: string;
         pixelRatio: number;
         windowWidth: number;
@@ -269,7 +269,7 @@ namespace "MINAApi" {
     showActionSheetAsync(obj: {
       itemList: string[];
       itemColor?: string;
-      then: (res: { tabIndex: number, cancel: boolean, [propName: string]: any }) => void;
+      then?: (res: { tabIndex: number, cancel: boolean, [propName: string]: any }) => void;
     });
 
     setNavigationBarTitleAsync(obj: { title: string });
@@ -297,12 +297,12 @@ namespace "MINAApi" {
 
   interface MINAOpenAPIAsync {
     loginAsync(obj: {
-      then: (res: { errMsg: string, code: string, [propName: string]: any }) => void
+      then?: (res: { errMsg: string, code: string, [propName: string]: any }) => void
     });
     checkSessionAsync();
 
     getUserInfoAsync(obj: {
-      then: (res: { userInfo: Object, rawData: string, signature: string, encryptedData: string, iv: string, [propName: string]: any }) => void
+      then?: (res: { userInfo: Object, rawData: string, signature: string, encryptedData: string, iv: string, [propName: string]: any }) => void
     });
 
     requestPaymentAsync(obj: {
