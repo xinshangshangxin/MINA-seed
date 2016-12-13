@@ -6,3 +6,5 @@ merge:
 push:
 	git push coding master
 	git push coding template
+pushTemplate:
+	git push seed template
