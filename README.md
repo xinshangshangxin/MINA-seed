@@ -89,6 +89,8 @@
   - bindNavigate() // 页面跳转, 可以查看demo: `pages/index/index.js:10` 
 
 
+## thanks
+- API提示来自于 [http://www.cnblogs.com/onecodeonescript/p/6060862.html](http://www.cnblogs.com/onecodeonescript/p/6060862.html)
 
 ## LICENSE
 **MIT**
