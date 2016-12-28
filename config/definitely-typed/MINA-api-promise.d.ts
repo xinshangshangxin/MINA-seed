@@ -11,6 +11,11 @@ namespace "MINAApi" {
     downloadFileAsync(obj: {
       url: string;
       header?: Object;
+      then?: {
+        res: {
+          tempFilePath: string
+        }
+      };
     });
     uploadFileAsync(obj: {
       url: string;
@@ -38,7 +43,7 @@ namespace "MINAApi" {
       count?: number;
       sizeType?: string[];
       sourceType?: string[];
-      then?: (res: { tempFilePaths: string[], [propName: string]: any }) => void;
+      then?: (res: {tempFilePaths: string[], [propName: string]: any}) => void;
     }): Promise;
     previewImageAsync(obj: {
       current?: string;
@@ -46,23 +51,23 @@ namespace "MINAApi" {
     });
     getImageInfoAsync(obj: {
       src: string;
-      then?: (res: { width: number, height: number, [propName: string]: any }) => void;
+      then?: (res: {width: number, height: number, [propName: string]: any}) => void;
     });
     startRecordAsync(obj: {
-      then?: (res: { tempFilePath: string, [propName: string]: any }) => void;
+      then?: (res: {tempFilePath: string, [propName: string]: any}) => void;
     });
     stopRecord();
 
-    playVoiceAsync(obj: { filePath: string });
+    playVoiceAsync(obj: {filePath: string});
     pauseVoice();
     stopVoice();
 
     getBackgroundAudioPlayerStateAsync(obj: {
-      then?: (res: { duration: number, currentPostion: number, status: number, downloadPercent: number, dataUrl: string, [propName: string]: any }) => void;
+      then?: (res: {duration: number, currentPostion: number, status: number, downloadPercent: number, dataUrl: string, [propName: string]: any}) => void;
     });
-    playBackgroundAudioAsync(obj: { dataUrl: string, title?: string, coverImgUrl?: string });
+    playBackgroundAudioAsync(obj: {dataUrl: string, title?: string, coverImgUrl?: string});
     pauseBackgroundAudio();
-    seekBackgroundAudioAsync(obj: { position: number });
+    seekBackgroundAudioAsync(obj: {position: number});
     stopBackgroundAudio();
     onBackgroundAudioPlay(cb: (data: any) => void);
     onBackgroundAudioPause(cb: (data: any) => void);
@@ -70,18 +75,18 @@ namespace "MINAApi" {
 
     saveFileAsync(obj: {
       tempFilePath: string,
-      then?: (res: { savedFilePath: string, [propName: string]: any }) => void;
+      then?: (res: {savedFilePath: string, [propName: string]: any}) => void;
     });
     getSavedFileListAsync(obj: {
-      then?: (res: { errMsg: string, fileList: { filePath: string, createTime: number, size: number, [propName: string]: any }[] }) => void;
+      then?: (res: {errMsg: string, fileList: {filePath: string, createTime: number, size: number, [propName: string]: any}[]}) => void;
     });
     getSavedFileInfoAsync(obj: {
       filePath: string;
-      then?: (res: { errMsg: string, createTime: number, size: number, [propName: string]: any }) => void;
+      then?: (res: {errMsg: string, createTime: number, size: number, [propName: string]: any}) => void;
     });
     removeSavedFileAsync(obj: {
       filePath: string;
-      then?: (res: { errMsg: string, fileList: { filePath: string, createTime: number, size: number, [propName: string]: any }[] }) => void;
+      then?: (res: {errMsg: string, fileList: {filePath: string, createTime: number, size: number, [propName: string]: any}[]}) => void;
     });
 
     chooseVideoAsync(obj: {
@@ -96,6 +101,7 @@ namespace "MINAApi" {
       width: number;
     };
     createAudioContext(audioId: string): {
+      setSrc(src: string);
       play();
       pause();
       seek(position: number);
@@ -104,39 +110,45 @@ namespace "MINAApi" {
       play();
       pause();
       seek(position: number);
-      sendDanmu(danmu: { text: string, color: string })
+      sendDanmu(danmu: {text: string, color: string})
     };
   }
 
   interface MINAStorageAPIAsync {
-    setStorageAsync(obj: { key: string, data: Object|string });
+    setStorageAsync(obj: {key: string, data: Object|string});
     setStorageSync(key: string, data: Object|string);
     getStorageAsync(obj: {
       key: string;
-      then?: (res: { data: any, [propName: string]: any }) => void;
+      then?: (res: {data: any, [propName: string]: any}) => void;
     });
     getStorageSync(key: string): any;
     getStorageInfoAsync(obj: {
-      then?: (res: { keys: string[], currentSize: number, limitSize: number, [propName: string]: any }) => void;
+      then?: (res: {keys: string[], currentSize: number, limitSize: number, [propName: string]: any}) => void;
     });
-    getStorageInfoSync(): { keys: string[], currentSize: number, limitSize: number };
+    getStorageInfoSync(): {keys: string[], currentSize: number, limitSize: number};
     removeStorageAsync(obj: {
       key: string;
-      then?: (res: { data: any, [propName: string]: any }) => void;
+      then?: (res: {data: any, [propName: string]: any}) => void;
     });
     removeStorageSync(key: string);
     clearStorage();
     clearStorageSync();
   }
 
+  interface mapContext {
+    getCenterLocation(obj);
+    moveToLocation();
+  }
+
+
   interface MINALocationAPIAsync {
     getLocationAsync(obj: {
       type: string;
-      then?: (res: { latitude: number, longitude: number, speed: number, accuracy: number, [propName: string]: any }) => void;
+      then?: (res: {latitude: number, longitude: number, speed: number, accuracy: number, [propName: string]: any}) => void;
     });
     chooseLocationAsync(obj: {
       type: string;
-      then?: (res: { latitude: number, longitude: number, speed: number, accuracy: number, [propName: string]: any }) => void;
+      then?: (res: {latitude: number, longitude: number, speed: number, accuracy: number, [propName: string]: any}) => void;
     });
     openLocationAsync(obj: {
       latitude: number;
@@ -145,11 +157,12 @@ namespace "MINAApi" {
       name?: string;
       address?: string;
     });
+    createMapContext(): mapContext;
   }
 
   interface MINADeviceAPIAsync {
     getNetworkTypeAsync(obj: {
-      then?: (res: { networkType: string, [propName: string]: any }) => void
+      then?: (res: {networkType: string, [propName: string]: any}) => void
     });
     getSystemInfoAsync(obj: {
       then?: (res: {
@@ -159,7 +172,8 @@ namespace "MINAApi" {
         windowHeight: number;
         language: string;
         version: string;
-        [propName: string]: any
+        system: string;
+        platform: string;
       }) => void
     });
     getSystemInfoSync(): {
@@ -169,11 +183,13 @@ namespace "MINAApi" {
       windowHeight: number;
       language: string;
       version: string;
-      [propName: string]: any
+      system: string;
+      platform: string;
     };
-    onAccelerometerChange(cb: (res: { x: number, y: number, z: number, [propName: string]: any }) => void);
-    onCompassChange(cb: (res: { direction: number, [propName: string]: any }) => void);
-    makePhoneCallAsync(obj: { phoneNumber: string });
+    onAccelerometerChange(cb: (res: {x: number, y: number, z: number, [propName: string]: any}) => void);
+    onCompassChange(cb: (res: {direction: number, [propName: string]: any}) => void);
+    makePhoneCallAsync(obj: {phoneNumber: string});
+    scanCodeAsync();
   }
 
   interface MINAAnimation {
@@ -214,39 +230,41 @@ namespace "MINAApi" {
   }
 
   interface MINAContext {
-    getActions(): any;
-    clearActions();
-
-    scale(scaleWidth: number, scaleHeight: number);
-    rotate(degree: number);
-    translate(x: number, y: number);
-    save();
-    restore();
-
-    clearRect(x: number, y: number, width: number, height: number);
-    fillText(x: number, y: number, text: string);
-    drawImage(imageResource: string, x: number, y: number, width: number, height: number);
-    fill();
-    stroke();
-
-    beginPath();
-    closePath();
-    moveTo(x: number, y: number);
-    lineTo(x: number, y: number);
-    rect(x: number, y: number, width: number, height: number);
-    arc(x: number, y: number, radius: number, startAngle: number, sweepAngle: number);
-    quadraticCurveTo(cpx: number, cpy: number, x: number, y: number);
-    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number);
-
     setFillStyle(color: string);
     setStrokeStyle(color: string);
-    setGlobalAlpha(alpha: number);
     setShadow(offsetX: number, offsetY: number, blur: number, color: string);
-    setFontSize(fontSize: number);
+    createLinearGradient(x0: number, y0: number, x1: number, y1: number);
+    createCircularGradient(x: number, y: number, r: number);
+    addColorStop(stop: number, color: string);
     setLineWidth(lineWidth: number);
     setLineCap(lineCap: string);
     setLineJoin(lineJoin: string);
     setMiterLimit(miterLimit: number);
+    rect(x: number, y: number, width: number, height: number);
+    fillRect(x: number, y: number, width: number, height: number);
+    strokeRect(x: number, y: number, width: number, height: number);
+    clearRect(x: number, y: number, width: number, height: number);
+    fill();
+    stroke();
+    beginPath();
+    closePath();
+    moveTo(x: number, y: number);
+    lineTo(x: number, y: number);
+    arc(x: number, y: number, radius: number, startAngle: number, sweepAngle: number, counterclockwise?: boolean);
+    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number);
+    quadraticCurveTo(cpx: number, cpy: number, x: number, y: number);
+    scale(scaleWidth: number, scaleHeight: number);
+    rotate(degree: number);
+    translate(x: number, y: number);
+    setFontSize(fontSize: number);
+    fillText(x: number, y: number, text: string);
+    drawImage(imageResource: string, x: number, y: number, width: number, height: number);
+    setGlobalAlpha(alpha: number);
+    save();
+    restore();
+    draw(reserve?: boolean);
+    getActions(): any;
+    clearActions();
   }
 
   interface MINAUIAPIAsync {
@@ -254,6 +272,7 @@ namespace "MINAApi" {
       title: string;
       icon?: string;
       duration?: number;
+      mask?: boolean;
     });
     hideToast();
     showModalAsync(obj: {
@@ -264,21 +283,22 @@ namespace "MINAApi" {
       cancelColor?: string;
       confirmText?: string;
       confirmColor?: string;
-      then?: (res: { confirm: number, [propName: string]: any }) => void;
+      then?: (res: {confirm: number, [propName: string]: any}) => void;
     });
     showActionSheetAsync(obj: {
       itemList: string[];
       itemColor?: string;
-      then?: (res: { tabIndex: number, cancel: boolean, [propName: string]: any }) => void;
+      then?: (res: {tabIndex: number, cancel: boolean, [propName: string]: any}) => void;
     });
 
-    setNavigationBarTitleAsync(obj: { title: string });
+    setNavigationBarTitleAsync(obj: {title: string});
     showNavigationBarLoading();
     hideNavigationBarLoading();
 
-    navigateToAsync(obj: { url: string });
-    redirectToAsync(obj: { url: string });
-    navigateBack(obj: { delta: number });
+    navigateToAsync(obj: {url: string});
+    redirectToAsync(obj: {url: string});
+    switchTabAsync(obj: {url: string});
+    navigateBack(obj: {delta: number});
 
     createAnimation(obj: {
       duration?: number;
@@ -287,9 +307,9 @@ namespace "MINAApi" {
       transformOrigin?: string;
     }): MINAAnimation;
 
-    createContext(): MINAContext;
-    drawCanvas(obj: { canvasId: string, actions: any[], reserve?: boolean });
-    canvasToTempFilePath(obj: { canvasId: string });
+    createCanvasContext(canvasId: string): MINAContext;
+    drawCanvas(obj: {canvasId: string, actions: any[], reserve?: boolean});
+    canvasToTempFilePath(obj: {canvasId: string});
 
     hideKeyboard();
     stopPullDownRefresh();
@@ -297,12 +317,12 @@ namespace "MINAApi" {
 
   interface MINAOpenAPIAsync {
     loginAsync(obj: {
-      then?: (res: { errMsg: string, code: string, [propName: string]: any }) => void
+      then?: (res: {errMsg: string, code: string, [propName: string]: any}) => void
     });
     checkSessionAsync();
 
     getUserInfoAsync(obj: {
-      then?: (res: { userInfo: Object, rawData: string, signature: string, encryptedData: string, iv: string, [propName: string]: any }) => void
+      then?: (res: {userInfo: Object, rawData: string, signature: string, encryptedData: string, iv: string, [propName: string]: any}) => void
     });
 
     requestPaymentAsync(obj: {
@@ -323,6 +343,11 @@ namespace "MINAApi" {
     onUnload?: Function;
     onPullDownRefresh?: Function;
     onReachBottom?: Function;
+    onShareAppMessage?(obj: {
+      title: string,
+      desc: string,
+      path: string,
+    });
     [propName: string]: any;
   }
 
@@ -330,6 +355,7 @@ namespace "MINAApi" {
     onLaunch?: Function;
     onShow?: Function;
     onHide?: Function;
+    onError?: Function;
     [propName: string]: any;
   }
 

@@ -19,7 +19,7 @@ declare module "WXAPI" {
   interface WXNetAPIDownloadFileObj {
     url: string;
     header?: Object;
-    success?: (res: { tempFilePath: string, [propName: string]: any }) => void;
+    success?: (res: {tempFilePath: string, [propName: string]: any}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
@@ -56,7 +56,7 @@ declare module "WXAPI" {
     count?: number;
     sizeType?: string[];
     sourceType?: string[];
-    success: (res: { tempFilePaths: string[], [propName: string]: any }) => void;
+    success: (res: {tempFilePaths: string[], [propName: string]: any}) => void;
     fail: WXCommonCallback;
     complete: WXCommonCallback;
   }
@@ -68,46 +68,46 @@ declare module "WXAPI" {
 
   interface WXGetImageObj {
     src: string;
-    success?: (res: { width: number, height: number, [propName: string]: any }) => void;
+    success?: (res: {width: number, height: number, [propName: string]: any}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
 
   interface WXStartRecordObj {
-    success?: (res: { tempFilePath: string, [propName: string]: any }) => void;
+    success?: (res: {tempFilePath: string, [propName: string]: any}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
 
   interface WXGetBackgroundAudioPlayerStateObj {
-    success?: (res: { duration: number, currentPostion: number, status: number, downloadPercent: number, dataUrl: string, [propName: string]: any }) => void;
+    success?: (res: {duration: number, currentPostion: number, status: number, downloadPercent: number, dataUrl: string, [propName: string]: any}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
 
   interface WXSaveFileObj {
     tempFilePath: string,
-    success?: (res: { savedFilePath: string, [propName: string]: any }) => void;
+    success?: (res: {savedFilePath: string, [propName: string]: any}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
 
   interface WXGetSaveFileObj {
-    success?: (res: { errMsg: string, fileList: { filePath: string, createTime: number, size: number, [propName: string]: any }[] }) => void;
+    success?: (res: {errMsg: string, fileList: {filePath: string, createTime: number, size: number, [propName: string]: any}[]}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
 
   interface WXGetSaveFileInfoObj {
     filePath: string;
-    success?: (res: { errMsg: string, createTime: number, size: number, [propName: string]: any }) => void;
+    success?: (res: {errMsg: string, createTime: number, size: number, [propName: string]: any}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
 
   interface WXRemoveSavedFileObj {
     filePath: string;
-    success?: (res: { errMsg: string, fileList: { filePath: string, createTime: number, size: number, [propName: string]: any }[] }) => void;
+    success?: (res: {errMsg: string, fileList: {filePath: string, createTime: number, size: number, [propName: string]: any}[]}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
@@ -127,6 +127,7 @@ declare module "WXAPI" {
   }
 
   interface WXAudioContext {
+    setSrc(src: string);
     play();
     pause();
     seek(position: number);
@@ -136,7 +137,7 @@ declare module "WXAPI" {
     play();
     pause();
     seek(position: number);
-    sendDanmu(danmu: { text: string, color: string })
+    sendDanmu(danmu: {text: string, color: string})
   }
 
   interface WXMediaAPI {
@@ -147,14 +148,14 @@ declare module "WXAPI" {
     startRecord(obj: WXStartRecordObj);
     stopRecord();
 
-    playVoice(obj: { filePath: string } & WXCommonObj);
+    playVoice(obj: {filePath: string} & WXCommonObj);
     pauseVoice();
     stopVoice();
 
     getBackgroundAudioPlayerState(obj: WXGetBackgroundAudioPlayerStateObj);
-    playBackgroundAudio(obj: { dataUrl: string, title?: string, coverImgUrl?: string } & WXCommonObj);
+    playBackgroundAudio(obj: {dataUrl: string, title?: string, coverImgUrl?: string} & WXCommonObj);
     pauseBackgroundAudio();
-    seekBackgroundAudio(obj: { position: number } & WXCommonObj);
+    seekBackgroundAudio(obj: {position: number} & WXCommonObj);
     stopBackgroundAudio();
     onBackgroundAudioPlay(cb: WXCommonCallback);
     onBackgroundAudioPause(cb: WXCommonCallback);
@@ -164,7 +165,7 @@ declare module "WXAPI" {
     getSavedFileList(obj: WXGetSaveFileObj);
     getSavedFileInfo(obj: WXGetSaveFileInfoObj);
     removeSavedFile(obj: WXRemoveSavedFileObj);
-    openDocument(obj: { filePath: string } & WXCommonObj);
+    openDocument(obj: {filePath: string} & WXCommonObj);
 
     chooseVideo(obj: WXChooseVideoObj): WXVideo;
     createAudioContext(audioId: string): WXAudioContext;
@@ -173,24 +174,24 @@ declare module "WXAPI" {
 
   interface WXGetStorageObj {
     key: string;
-    success: (res: { data: any, [propName: string]: any }) => void;
+    success: (res: {data: any, [propName: string]: any}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
 
   interface WXGetStorageInfoObj {
-    success: (res: { keys: string[], currentSize: number, limitSize: number, [propName: string]: any }) => void;
+    success: (res: {keys: string[], currentSize: number, limitSize: number, [propName: string]: any}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
 
   interface WXStorageAPI {
-    setStorage(obj: { key: string, data: Object|string } & WXCommonObj);
+    setStorage(obj: {key: string, data: Object|string} & WXCommonObj);
     setStorageSync(key: string, data: Object|string);
     getStorage(obj: WXGetStorageObj);
     getStorageSync(key: string): any;
     getStorageInfo(obj: WXGetStorageInfoObj);
-    getStorageInfoSync(): { keys: string[], currentSize: number, limitSize: number };
+    getStorageInfoSync(): {keys: string[], currentSize: number, limitSize: number};
     removeStorage(obj: WXGetStorageObj);
     removeStorageSync(key: string);
     clearStorage();
@@ -199,14 +200,14 @@ declare module "WXAPI" {
 
   interface WXGetLocationObj {
     type: string;
-    success: (res: { latitude: number, longitude: number, speed: number, accuracy: number, [propName: string]: any }) => void;
+    success: (res: {latitude: number, longitude: number, speed: number, accuracy: number, [propName: string]: any}) => void;
     cancel?: WXCommonCallback;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
 
   interface WXChooseLocationObj {
-    success: (res: { latitude: number, longitude: number, name: string, address: string, [propName: string]: any }) => void;
+    success: (res: {latitude: number, longitude: number, name: string, address: string, [propName: string]: any}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
@@ -219,10 +220,16 @@ declare module "WXAPI" {
     address?: string;
   }
 
+  interface mapContext {
+    getCenterLocation(obj: WXCommonObj);
+    moveToLocation();
+  }
+
   interface WXLocationAPI {
     getLocation(obj: WXGetLocationObj);
     chooseLocation(obj: WXGetLocationObj);
     openLocation(obj: WXOpenLocationObj);
+    createMapContext(mapId: string): mapContext;
   }
 
   interface WXSystemInfo {
@@ -236,18 +243,20 @@ declare module "WXAPI" {
   }
 
   interface WXDeviceAPI {
-    getNetworkType(obj: { success: (res: { networkType: string, [propName: string]: any }) => void, fail?: WXCommonCallback, complete?: WXCommonCallback });
-    getSystemInfo(obj: { success: (res: WXSystemInfo) => void, fail?: WXCommonCallback, complete?: WXCommonCallback });
+    getNetworkType(obj: {success: (res: {networkType: string, [propName: string]: any}) => void, fail?: WXCommonCallback, complete?: WXCommonCallback});
+    getSystemInfo(obj: {success: (res: WXSystemInfo) => void, fail?: WXCommonCallback, complete?: WXCommonCallback});
     getSystemInfoSync(): WXSystemInfo;
-    onAccelerometerChange(cb: (res: { x: number, y: number, z: number, [propName: string]: any }) => void);
-    onCompassChange(cb: (res: { direction: number, [propName: string]: any }) => void);
-    makePhoneCall(obj: { phoneNumber: string } & WXCommonObj);
+    onAccelerometerChange(cb: (res: {x: number, y: number, z: number, [propName: string]: any}) => void);
+    onCompassChange(cb: (res: {direction: number, [propName: string]: any}) => void);
+    makePhoneCall(obj: {phoneNumber: string} & WXCommonObj);
+    scanCode(obj: WXCommonObj)
   }
 
   interface WXToast extends WXCommonObj {
     title: string;
     icon?: string;
     duration?: number;
+    mask?: boolean;
   }
 
   interface WXModal {
@@ -258,7 +267,7 @@ declare module "WXAPI" {
     cancelColor?: string;
     confirmText?: string;
     confirmColor?: string;
-    success?: (res: { confirm: number, [propName: string]: any }) => void;
+    success?: (res: {confirm: number, [propName: string]: any}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
@@ -266,7 +275,7 @@ declare module "WXAPI" {
   interface WXActionSheet {
     itemList: string[];
     itemColor?: string;
-    success?: (res: { tabIndex: number, cancel: boolean, [propName: string]: any }) => void;
+    success?: (res: {tabIndex: number, cancel: boolean, [propName: string]: any}) => void;
     fail?: WXCommonCallback;
     complete?: WXCommonCallback;
   }
@@ -294,18 +303,18 @@ declare module "WXAPI" {
     rotateZ(deg: number): WXAnimation;
     rotate3d(deg: number, x: number, y: number, z: number): WXAnimation;
 
-    scale(sx: number, sy?:number): WXAnimation;
+    scale(sx: number, sy?: number): WXAnimation;
     scaleX(sx: number): WXAnimation;
     scaleY(sy: number): WXAnimation;
     scaleZ(sz: number): WXAnimation;
-    scale3d(sx: number, sy:number, sz:number): WXAnimation;
+    scale3d(sx: number, sy: number, sz: number): WXAnimation;
 
-    translate(tx: number, ty?:number): WXAnimation;
+    translate(tx: number, ty?: number): WXAnimation;
     translateX(tx: number): WXAnimation;
     translateY(ty: number): WXAnimation;
     translateZ(tz: number): WXAnimation;
     translate3d(tx: number, ty: number, tz: number): WXAnimation;
-    skew(ax: number, ay?:number): WXAnimation;
+    skew(ax: number, ay?: number): WXAnimation;
     skewX(ax: number): WXAnimation;
     skewY(ay: number): WXAnimation;
 
@@ -316,39 +325,41 @@ declare module "WXAPI" {
   }
 
   interface WXContext {
-    getActions(): any;
-    clearActions();
-
-    scale(scaleWidth: number, scaleHeight: number);
-    rotate(degree: number);
-    translate(x: number, y: number);
-    save();
-    restore();
-
-    clearRect(x: number, y: number, width: number, height: number);
-    fillText(x: number, y: number, text: string);
-    drawImage(imageResource: string, x: number, y: number, width: number, height: number);
-    fill();
-    stroke();
-
-    beginPath();
-    closePath();
-    moveTo(x: number, y: number);
-    lineTo(x: number, y: number);
-    rect(x: number, y: number, width: number, height: number);
-    arc(x: number, y: number, radius: number, startAngle: number, sweepAngle: number);
-    quadraticCurveTo(cpx: number, cpy: number, x: number, y: number);
-    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number);
-
     setFillStyle(color: string);
     setStrokeStyle(color: string);
-    setGlobalAlpha(alpha: number);
     setShadow(offsetX: number, offsetY: number, blur: number, color: string);
-    setFontSize(fontSize: number);
+    createLinearGradient(x0: number, y0: number, x1: number, y1: number);
+    createCircularGradient(x: number, y: number, r: number);
+    addColorStop(stop: number, color: string);
     setLineWidth(lineWidth: number);
     setLineCap(lineCap: string);
     setLineJoin(lineJoin: string);
     setMiterLimit(miterLimit: number);
+    rect(x: number, y: number, width: number, height: number);
+    fillRect(x: number, y: number, width: number, height: number);
+    strokeRect(x: number, y: number, width: number, height: number);
+    clearRect(x: number, y: number, width: number, height: number);
+    fill();
+    stroke();
+    beginPath();
+    closePath();
+    moveTo(x: number, y: number);
+    lineTo(x: number, y: number);
+    arc(x: number, y: number, radius: number, startAngle: number, sweepAngle: number, counterclockwise?: boolean);
+    bezierCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number);
+    quadraticCurveTo(cpx: number, cpy: number, x: number, y: number);
+    scale(scaleWidth: number, scaleHeight: number);
+    rotate(degree: number);
+    translate(x: number, y: number);
+    setFontSize(fontSize: number);
+    fillText(x: number, y: number, text: string);
+    drawImage(imageResource: string, x: number, y: number, width: number, height: number);
+    setGlobalAlpha(alpha: number);
+    save();
+    restore();
+    draw(reserve?: boolean);
+    getActions(): any;
+    clearActions();
   }
 
   interface WXUIAPI {
@@ -357,19 +368,20 @@ declare module "WXAPI" {
     showModal(obj: WXModal);
     showActionSheet(obj: WXActionSheet);
 
-    setNavigationBarTitle(obj: { title: string } & WXCommonObj);
+    setNavigationBarTitle(obj: {title: string} & WXCommonObj);
     showNavigationBarLoading();
     hideNavigationBarLoading();
 
-    navigateTo(obj: { url: string } & WXCommonObj);
-    redirectTo(obj: { url: string } & WXCommonObj);
-    navigateBack(obj: { delta: number });
+    navigateTo(obj: {url: string} & WXCommonObj);
+    redirectTo(obj: {url: string} & WXCommonObj);
+    switchTab(obj: {url: string} & WXCommonObj);
+    navigateBack(obj: {delta: number});
 
     createAnimation(obj: WXCreateAnimationObj): WXAnimation;
 
-    createContext(): WXContext;
-    drawCanvas(obj: { canvasId: string, actions: any[], reserve?: boolean });
-    canvasToTempFilePath(obj: { canvasId: string });
+    createCanvasContext(canvasId: string): WXContext;
+    drawCanvas(obj: {canvasId: string, actions: any[], reserve?: boolean});
+    canvasToTempFilePath(obj: {canvasId: string});
 
     hideKeyboard();
     stopPullDownRefresh();
@@ -384,10 +396,10 @@ declare module "WXAPI" {
   }
 
   interface WXOpenAPI {
-    login(obj: { success?: (res: { errMsg: string, code: string, [propName: string]: any }) => void, fail?: WXCommonCallback, complete?: WXCommonCallback  });
+    login(obj: {success?: (res: {errMsg: string, code: string, [propName: string]: any}) => void, fail?: WXCommonCallback, complete?: WXCommonCallback});
     checkSession(obj: WXCommonObj);
 
-    getUserInfo(obj: { success?: (res: { userInfo: Object, rawData: string, signature: string, encryptedData: string, iv: string, [propName: string]: any }) => void, fail?: WXCommonCallback, complete?: WXCommonCallback  });
+    getUserInfo(obj: {success?: (res: {userInfo: Object, rawData: string, signature: string, encryptedData: string, iv: string, [propName: string]: any}) => void, fail?: WXCommonCallback, complete?: WXCommonCallback});
 
     requestPayment(obj: WXPayment);
   }
@@ -401,6 +413,11 @@ declare module "WXAPI" {
     onUnload?: Function;
     onPullDownRefresh?: Function;
     onReachBottom?: Function;
+    onShareAppMessage?(obj: {
+      title: string,
+      desc: string,
+      path: string,
+    });
     [propName: string]: any;
   }
 
@@ -431,9 +448,12 @@ declare module "WXAPI" {
     getCurrentPage(): IPage;
   }
 
-	export let wx: WXMergedAPI;
-	export let Page: IPage;
-	export function App(obj: WXAppObj);
-	export function getApp(): WXGetAppObj;
-	export function getCurrentPages(): any[];
+  export let wx: WXMergedAPI;
+  export let Page: IPage;
+
+  export function App(obj: WXAppObj);
+
+  export function getApp(): WXGetAppObj;
+
+  export function getCurrentPages(): any[];
 }
