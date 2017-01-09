@@ -7,21 +7,7 @@ App({
 
     this.init();
 
-    return wx
-      .getStorageAsync({
-        key: 'logs',
-      })
-      .then((data) => {
-        let logs = data.data;
-        logs.unshift(Date.now());
-        logs.splice(100, logs.length);
-
-        return wx.setStorageAsync({
-          key: 'logs',
-          data: logs,
-        });
-      })
-      .catch(e => console.warn(e));
+    return this.addLog();
   },
   init() {
     // 注入一些方法, 如 bluebird, lodash, debugLog, wx 接口Promise化, requestLoading
@@ -32,5 +18,25 @@ App({
       requestLoading: true,
       lodash: true,
     });
+  },
+  addLog() {
+    let logs = [];
+    wx
+      .getStorageAsync({
+        key: 'logs',
+      })
+      .then((data) => {
+        logs = data.data;
+      })
+      .catch(e => console.warn(e))
+      .then(() => {
+        logs.unshift(Date.now());
+        logs.splice(100, logs.length);
+
+        return wx.setStorageAsync({
+          key: 'logs',
+          data: logs,
+        });
+      });
   },
 });
