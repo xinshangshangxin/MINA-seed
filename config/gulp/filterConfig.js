@@ -38,11 +38,24 @@ const lodashStr = `{
     setTimeout: setTimeout,
   };`;
 
+const bluebirdJoin = `
+module.exports = function () {
+  console.warn('Promise.join not support');
+  return function () {
+    throw new Error('Promise.join not support');
+  };
+}
+`;
+
 const obj = {
   npmModules: [{
     src: ['bluebird/js/release/schedule.js'],
     subStr: /[\d\D]*/,
     newStr: sheduleStr,
+  }, {
+    src: ['bluebird/js/release/join.js'],
+    subStr: /[\d\D]*/,
+    newStr: bluebirdJoin,
   }, {
     src: ['lodash/lodash.js'],
     subStr: /var root = freeGlobal.*/,
