@@ -5,13 +5,15 @@ const spawn = require('child_process').spawn;
 const path = require('path');
 const fs = Promise.promisifyAll(require('fs-extra'));
 
+const projectPath = __dirname.replace(/(.*?)[^/]*$/, '$1');
+
 const svc = {
   appName: undefined,
   eshintReporter(result) {
     let isNotify = false;
     if (result.messages.length) {
       result.messages.forEach((item) => {
-        let location = `${result.filePath.replace(/.*?\/(?=wxMall\/)/, '')}:${item.line}:${item.column}`;
+        let location = `${result.filePath.replace(projectPath, '')}:${item.line}:${item.column}`;
         let ruleId = `${item.ruleId}`;
         let message = `${item.message}`;
 
