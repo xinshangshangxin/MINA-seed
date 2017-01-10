@@ -26,13 +26,18 @@
 
 ### utils/\*\*/\*.js
 - inject.js
-  demo at `app.js:27`
+  demo at `app.js:27`  
+  
    ```js
   inject.init({
     debugLog: true,   
     bluebird: true,  
-    wxPromise: true,
-    requestLoading: true,
+    wxPromise: {
+      suffix: 'Async',
+    },
+    requestLoading: {
+      title: 'loading...',
+    },
     lodash: true,
   });
    ```
@@ -79,8 +84,12 @@
   inject.init({
     debugLog: true,   // 使得微信vConsole显示error 和 function
     bluebird: true,   // 注入bluebird
-    wxPromise: true, // wx 接口Promise化
-    requestLoading: true, // 请求时显示loading框
+    wxPromise: {      // wx 接口Promise化
+      suffix: 'Async',
+    }, 
+    requestLoading: { // 请求时显示loading框
+      title: 'loading...',
+    },
     lodash: true,   // 注入lodash
   });
    ```

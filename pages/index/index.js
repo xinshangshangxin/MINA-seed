@@ -6,6 +6,9 @@ Page({
   },
   onLoad() {
     console.info('onLoad');
+    wx.requestAsync({
+      url: 'https://github.com/xinshangshangxin/MINA-seed',
+    });
   },
   navigate: bindNavigate({
     url: '/pages/logs/logs',

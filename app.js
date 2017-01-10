@@ -14,8 +14,12 @@ App({
     inject.init({
       debugLog: true,
       bluebird: true,
-      wxPromise: true,
-      requestLoading: true,
+      wxPromise: {
+        suffix: 'Async',
+      },
+      requestLoading: {
+        title: 'loading...',
+      },
       lodash: true,
     });
   },

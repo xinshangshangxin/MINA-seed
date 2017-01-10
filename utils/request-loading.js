@@ -1,15 +1,15 @@
 
-function init() {
+function init(config = {}) {
   const originRequet = wx.requestAsync;
 
   let requestIndex = 0;
   wx.requestAsync = function requestAsync(...args) {
     requestIndex += 1;
     if (requestIndex === 1) {
-      console.info('-----------show loading----------');
-      wx.showToast({
+      wx.showToastAsync({
         icon: 'loading',
         duration: 10000,
+        title: config.title || '',
       });
     }
 
@@ -17,7 +17,6 @@ function init() {
       .finally(() => {
         requestIndex -= 1;
         if (requestIndex === 0) {
-          console.info('----------hide loading----------');
           wx.hideToast();
         }
       });
