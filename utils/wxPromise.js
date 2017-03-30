@@ -1,6 +1,8 @@
 const { Promise } = require('./util');
 
 const noPromiseMethods = {
+  arrayBufferToBase64: true,
+  base64ToArrayBuffer: true,
   canvasToTempFilePath: true,
   clearStorage: true,
   closeSocket: true,
@@ -14,6 +16,7 @@ const noPromiseMethods = {
   hideKeyboard: true,
   hideNavigationBarLoading: true,
   hideToast: true,
+  hideLoading: true,
   navigateBack: true,
   pauseBackgroundAudio: true,
   pauseVoice: true,
