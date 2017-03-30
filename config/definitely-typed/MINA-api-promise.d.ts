@@ -1,6 +1,75 @@
 namespace "MINAApi" {
 
-  export type MINAMergedAPI = MINANetAPIAsync & MINAMediaAPIAsync & MINAStorageAPIAsync & MINALocationAPIAsync & MINADeviceAPIAsync & MINAUIAPIAsync & MINAOpenAPIAsync;
+  export type MINAMergedAPI = MINANetAPIAsync & MINAMediaAPIAsync & MINAStorageAPIAsync & MINALocationAPIAsync & MINADeviceAPIAsync & MINAUIAPIAsync & MINAOpenAPIAsync & MINABluetoothAsync & MINAShareMenu & MINACard & MINAClipboard & MINACompass & MINAAccelerometer & MINAExtensionAsync & MINASettingAsync & MINAChooseAddressAsync;
+
+  interface MINAShareMenu {
+    showShareMenuAsync();
+    hideShareMenuAsync();
+  }
+
+  interface MINACard {
+    addCardAsync(obj: {cardList: Array});
+    openCardAsync(obj: {cardList: Array});
+  }
+
+  interface MINAClipboard {
+    setClipboardDataAsync(data: string);
+    getClipboardDataAsync();
+  }
+
+  interface MINACompass {
+    onCompassChange(cb: (res: {direction: number, [propName: string]: any}) => void);
+    startCompassAsync();
+    stopCompassAsync();
+  }
+
+  interface MINAAccelerometer {
+    onAccelerometerChange(cb: (x: Number,y: Number,z: Number)=>void);
+    startAccelerometerAsync();
+    stopAccelerometerAsync();
+  }
+
+  interface MINAExtensionAsync {
+    arrayBufferToBase64(arrayBuffer: ArrayBuffer);
+    base64ToArrayBuffer(base64: string);
+  }
+
+  interface MINASettingAsync {
+    openSettingAsync();
+  }
+
+  interface MINAChooseAddressAsync {
+    chooseAddressAsync();
+  }
+
+  interface MINABluetoothAsync {
+    openBluetoothAdapterAsync(): void;
+    closeBluetoothAdapterAsync(): void;
+    getBluetoothAdapterStateAsync(): {
+      adapterState: {
+        discovering: boolean,
+        available: boolean,
+      },
+      errMsg: string,
+    };
+    onBluetoothAdapterStateChange(cb: () => void);
+    startBluetoothDevicesDiscoveryAsync(obj: { services: Array });
+    stopBluetoothDevicesDiscoveryAsync();
+    getBluetoothDevicesAsync(obj: { services: Array });
+    onBluetoothDeviceFound(cb: () => void);
+    getConnectedBluetoothDevicesAsync(obj: { services: Array });
+    createBLEConnectionAsync(obj: { deviceId: string });
+    closeBLEConnectionAsync(obj: { deviceId: string });
+    onBLEConnectionStateChanged(cb: (deviceId: string) => void);
+    getBLEDeviceServicesAsync(obj: { deviceId: string });
+    getBLEDeviceCharacteristicsAsync(obj: { deviceId: string, serviceId: string });
+    readBLECharacteristicValueAsync(obj: { deviceId: string, serviceId: string, characteristicId: string });
+    writeBLECharacteristicValueAsync(obj: { deviceId: string, serviceId: string, characteristicId: string, value: ArrayBuffer });
+    notifyBLECharacteristicValueChangedAsync(obj: { deviceId: string, serviceId: string, characteristicId: string, state: boolean });
+    onBLECharacteristicValueChange(cb: () => void);
+    onBLEConnectionStateChanged(cb: (res: { deviceId: string, connected: boolean }) => void);
+    onBLECharacteristicValueChange(cb: (res: { deviceId: string, connected: boolean, characteristicId: string }) => void);
+  }
 
   interface MINANetAPIAsync {
     requestAsync(obj: {
@@ -164,16 +233,20 @@ namespace "MINAApi" {
     getNetworkTypeAsync(obj: {
       then?: (res: {networkType: string, [propName: string]: any}) => void
     });
+    onNetworkStatusChange(cb: (isConnected: boolean, networkType: string) => void);
     getSystemInfoAsync(obj: {
       then?: (res: {
         model: string;
         pixelRatio: number;
+        screenWidth: number;
+        screenHeight: number;
         windowWidth: number;
         windowHeight: number;
         language: string;
         version: string;
         system: string;
         platform: string;
+        SDKVersion: string;
       }) => void
     });
     getSystemInfoSync(): {
@@ -186,10 +259,11 @@ namespace "MINAApi" {
       system: string;
       platform: string;
     };
-    onAccelerometerChange(cb: (res: {x: number, y: number, z: number, [propName: string]: any}) => void);
-    onCompassChange(cb: (res: {direction: number, [propName: string]: any}) => void);
     makePhoneCallAsync(obj: {phoneNumber: string});
-    scanCodeAsync();
+    scanCodeAsync(): {
+      scanType: string,
+      charSet: string,
+    };
   }
 
   interface MINAAnimation {
@@ -230,6 +304,7 @@ namespace "MINAApi" {
   }
 
   interface MINAContext {
+    setTextAlign(align: string);
     setFillStyle(color: string);
     setStrokeStyle(color: string);
     setShadow(offsetX: number, offsetY: number, blur: number, color: string);
@@ -270,11 +345,14 @@ namespace "MINAApi" {
   interface MINAUIAPIAsync {
     showToastAsync(obj: {
       title: string;
+      image?:string;
       icon?: string;
       duration?: number;
       mask?: boolean;
     });
+    showLoadingAsync(obj: { title: string; mask?: boolean; });
     hideToast();
+    hideLoading();
     showModalAsync(obj: {
       title: string;
       content: string;
@@ -297,6 +375,7 @@ namespace "MINAApi" {
 
     navigateToAsync(obj: {url: string});
     redirectToAsync(obj: {url: string});
+    reLaunchAsync(obj: {url: string});
     switchTabAsync(obj: {url: string});
     navigateBack(obj: {delta: number});
 
@@ -322,7 +401,7 @@ namespace "MINAApi" {
     checkSessionAsync();
 
     getUserInfoAsync(obj: {
-      then?: (res: {userInfo: Object, rawData: string, signature: string, encryptedData: string, iv: string, [propName: string]: any}) => void
+      then?: (res: {userInfo: Object, rawData: string, signature: string, encryptedData: string, iv: string, withCredentials: boolean}) => void
     });
 
     requestPaymentAsync(obj: {
